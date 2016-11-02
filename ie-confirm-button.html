@@ -1,0 +1,138 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<!--
+`ie-confirm-button`
+A button that asks for confirmation before performing a given action
+
+@demo demo/index.html
+-->
+
+<dom-module id="ie-confirm-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      #confirmToggle {
+        background-color: var(--confirm-button-toggle-background-color, white);
+        color: var(--confirm-button-toggle-color, black);
+      }
+
+      /*
+       * This is a work around to fix native `hidden` which for some reason doesn't hide elements
+       * when they apply a `display` property.
+       * see https://github.com/PolymerElements/iron-flex-layout/issues/86
+       */
+      [hidden] {
+        display: none !important;
+      }
+
+      .container {
+        perspective: 400px;
+      }
+
+      .confirm-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .confirm-btn {
+        font-size: 70%;
+      }
+
+      .confirm-btn * {
+        pointer-events: none;
+      }
+
+      #confirmBtn {
+        background-color: var(--confirm-button-confirm-background-color, #0f9d58);
+        color: var(--confirm-button-confirm-color, white);
+      }
+
+      #cancelBtn {
+        background-color: var(--confirm-button-cancel-background-color, #e3010a);
+        color: var(--confirm-button-cancel-color, white);
+      }
+    </style>
+
+    <div class="container">
+      <paper-button id="confirmToggle" raised hidden$="[[confirming]]">
+        <div>
+          <content></content>
+        </div>
+      </paper-button>
+      <div class="confirm-panel" hidden$="[[!confirming]]" tabindex="-1">
+        <paper-button class="confirm-btn" id="confirmBtn" raised on-tap="doAction">
+          <iron-icon icon="check"></iron-icon>
+        </paper-button>
+        <paper-button class="confirm-btn" id="cancelBtn" raised on-tap="cancelConfirming">
+          <iron-icon icon="clear"></iron-icon>
+        </paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'ie-confirm-button',
+
+      behaviors: [
+          Polymer.IronA11yKeysBehavior
+      ],
+
+      properties: {
+        confirming: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        }
+      },
+
+      keyBindings: {
+        'esc': 'cancelConfirming',
+        'enter': 'doAction',
+        'space': 'startConfirming'
+      },
+
+      keyEventTarget: this,
+
+      stopKeyboardEventPropagation: true,
+
+      listeners: {
+        tap: 'startConfirming'
+      },
+
+      cancelConfirming: function (e) {
+        this._decideAndPerform(e, 'action-canceled');
+      },
+
+      startConfirming: function (e) {
+        this.confirming = true;
+        this.$.confirmBtn.focus();
+        e.stopPropagation();
+      },
+
+      doAction: function (e) {
+        this._decideAndPerform(e, 'action-confirmed');
+      },
+
+      _decideAndPerform: function (e, eventName) {
+        if (this.confirming) {
+          e.stopPropagation();
+          this.fire(eventName, e);
+          this.confirming = false;
+        } else if (e.type === 'tap') {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+
+    });
+  </script>
+</dom-module>

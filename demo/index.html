@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>ie-confirm-button demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script>
+      /* this script must run before Polymer is imported */
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
+    </script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../ie-confirm-button.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic ie-confirm-button demo</h3>
+      <demo-snippet>
+        <template>
+          <ie-confirm-button>Hello</ie-confirm-button>
+        </template>
+      </demo-snippet>
+    </div>
+
+    <script>
+      window.addEventListener('WebComponentsReady', () => {
+        const btn = document.querySelector('ie-confirm-button');
+        btn.addEventListener('action-confirmed', evt => console.log('Confirmed! yay!', evt));
+        btn.addEventListener('action-canceled', evt => console.log('User canceled. maybe sent analytics event', evt));
+      });
+    </script>
+  </body>
+</html>

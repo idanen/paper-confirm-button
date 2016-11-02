@@ -1,0 +1,15 @@
+{
+  "name": "ie-confirm-button",
+  "description": "A button that asks for confirmation before performing a given action",
+  "main": "ie-confirm-button.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

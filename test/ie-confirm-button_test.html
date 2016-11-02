@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>ie-confirm-button test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../ie-confirm-button.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <ie-confirm-button></ie-confirm-button>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('ie-confirm-button', function() {
+        test('instantiating the element works', function() {
+          var element = fixture('basic');
+          assert.equal(element.is, 'ie-confirm-button');
+        });
+        test('when clicking the element it enters its "confirming" state', function() {
+          var element = fixture('basic');
+          element.click();
+          assert.equal(element.confirming, true);
+        });
+        test('when clicking the cancel button "action-canceled" event should be fired', function(done) {
+          var element = fixture('basic');
+          element.addEventListener('action-canceled', ev => done());
+          element.$.cancelBtn.click();
+        });
+        test('when clicking the confirm button "action-confirmed" event should be fired', function(done) {
+          var element = fixture('basic');
+          element.addEventListener('action-confirmed', ev => done());
+          element.$.confirmBtn.click();
+        });
+      });
+    </script>
+  </body>
+</html>
