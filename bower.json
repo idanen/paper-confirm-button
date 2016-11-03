@@ -2,6 +2,7 @@
   "name": "ie-confirm-button",
   "description": "A button that asks for confirmation before performing a given action",
   "main": "ie-confirm-button.html",
+  "keywords": "web-components",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6"
