@@ -5,7 +5,7 @@
   "homepage": "https://idanen.github.io/paper-confirm-button/",
   "repository": {
     "type": "git",
-    "url": "git@github.com:idanen/paper-confirm-button.git"
+    "url": "git://github.com/idanen/paper-confirm-button.git"
   },
   "authors": ["Idan Entin <idanen@gmail.com>"],
   "keywords": [
