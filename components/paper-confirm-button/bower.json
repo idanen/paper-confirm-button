@@ -1,0 +1,30 @@
+{
+  "name": "paper-confirm-button",
+  "description": "A button that asks for confirmation before performing a given action",
+  "main": "paper-confirm-button.html",
+  "homepage": "https://idanen.github.io/paper-confirm-button/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/idanen/paper-confirm-button.git"
+  },
+  "authors": [
+    "Idan Entin <idanen@gmail.com>"
+  ],
+  "keywords": [
+    "web-components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6",
+    "paper-button": "PolymerElements/paper-button#1.0.14",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.12",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.1.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.1.5"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

@@ -1,0 +1,198 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<iron-iconset-svg size="24" name="confirmicons">
+  <svg><defs>
+    <g id="clear"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+    <g id="done"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></g>
+  </defs></svg>
+</iron-iconset-svg>
+
+
+<!--
+`paper-confirm-button`
+A button that asks for confirmation before performing a given action
+
+@demo demo/index.html
+-->
+
+<dom-module id="paper-confirm-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      #confirmToggle {
+        background-color: var(--confirm-button-toggle-background-color, white);
+        color: var(--confirm-button-toggle-color, black);
+        transition: opacity .3s;
+      }
+
+      .hidden {
+        opacity: 0;
+      }
+
+      .container {
+        perspective: 400px;
+      }
+
+      .confirm-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        transition: opacity .3s .2s;
+      }
+
+      .confirm-panel.hidden {
+        pointer-events: none;
+      }
+
+      .confirm-btn {
+        font-size: 70%;
+        transition: transform .3s, opacity .3s;
+      }
+
+      .confirm-btn * {
+        pointer-events: none;
+      }
+
+      #confirmBtn {
+        background-color: var(--confirm-button-confirm-background-color, #0f9d58);
+        color: var(--confirm-button-confirm-color, white);
+        transform-origin: left;
+      }
+
+      #cancelBtn {
+        background-color: var(--confirm-button-cancel-background-color, #e3010a);
+        color: var(--confirm-button-cancel-color, white);
+        transform-origin: right;
+      }
+
+      .selected {
+        transform: scale(4);
+        opacity: 0;
+      }
+
+      .unselected {
+        transform: scale(0);
+        opacity: 0;
+      }
+    </style>
+
+    <div class="container">
+      <paper-button id="confirmToggle" raised>
+        <div>
+          <content></content>
+        </div>
+      </paper-button>
+      <div class="confirm-panel hidden" id="confirmPanel" tabindex="-1">
+        <paper-button class="confirm-btn" id="confirmBtn" raised on-tap="doAction">
+          <iron-icon icon="confirmicons:done"></iron-icon>
+        </paper-button>
+        <paper-button class="confirm-btn" id="cancelBtn" raised on-tap="cancelConfirming">
+          <iron-icon icon="confirmicons:clear"></iron-icon>
+        </paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'paper-confirm-button',
+
+      behaviors: [
+          Polymer.IronA11yKeysBehavior
+      ],
+
+      properties: {
+        confirming: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        }
+      },
+
+      created: function () {
+        this._boundEventListeners = {
+          transitionend: this._cleanAfterTransition.bind(this)
+        };
+      },
+
+      attached: function () {
+        this.$.confirmPanel.addEventListener('transitionend', this._boundEventListeners.transitionend);
+      },
+
+      detached: function () {
+        this.$.confirmPanel.removeEventListener('transitionend', this._boundEventListeners.transitionend);
+      },
+
+      keyBindings: {
+        'esc': 'cancelConfirming',
+        'enter': 'doAction',
+        'space': 'startConfirming'
+      },
+
+      keyEventTarget: this,
+
+      stopKeyboardEventPropagation: true,
+
+      listeners: {
+        tap: 'startConfirming'
+      },
+
+      cancelConfirming: function (e) {
+        this.$.confirmBtn.classList.add('unselected');
+        this.$.cancelBtn.classList.add('selected');
+        this._decideAndPerform(e, 'action-canceled');
+      },
+
+      startConfirming: function (e) {
+        this.confirming = true;
+        this.$.confirmToggle.classList.add('hidden');
+        this.$.confirmPanel.classList.remove('hidden');
+        this.$.confirmBtn.focus();
+        e.stopPropagation();
+      },
+
+      doAction: function (e) {
+        this.$.confirmBtn.classList.add('selected');
+        this.$.cancelBtn.classList.add('unselected');
+        this._decideAndPerform(e, 'action-confirmed');
+      },
+
+      _decideAndPerform: function (e, eventName) {
+        if (this.confirming) {
+          e.stopPropagation();
+          this.fire(eventName, e);
+        } else if (e.type === 'tap') {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        this.confirming = false;
+
+        this.$.confirmToggle.classList.remove('hidden');
+        this.$.confirmPanel.classList.add('hidden');
+      },
+
+      _cleanAfterTransition: function () {
+        let selected = this.$$('.selected'),
+            unselected = this.$$('.unselected');
+        if (selected) {
+          selected.classList.remove('selected');
+        }
+        if (unselected) {
+          unselected.classList.remove('unselected');
+        }
+      }
+
+    });
+  </script>
+</dom-module>
