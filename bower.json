@@ -7,13 +7,16 @@
     "type": "git",
     "url": "git://github.com/idanen/paper-confirm-button.git"
   },
-  "authors": ["Idan Entin <idanen@gmail.com>"],
+  "authors": [
+    "Idan Entin <idanen@gmail.com>"
+  ],
   "keywords": [
     "web-components"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6"
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.6",
+    "paper-styles": "PolymerElements/paper-styles#^1.1.5"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

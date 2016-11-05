@@ -19,15 +19,11 @@ A button that asks for confirmation before performing a given action
       #confirmToggle {
         background-color: var(--confirm-button-toggle-background-color, white);
         color: var(--confirm-button-toggle-color, black);
+        transition: opacity .3s;
       }
 
-      /*
-       * This is a work around to fix native `hidden` which for some reason doesn't hide elements
-       * when they apply a `display` property.
-       * see https://github.com/PolymerElements/iron-flex-layout/issues/86
-       */
-      [hidden] {
-        display: none !important;
+      .hidden {
+        opacity: 0;
       }
 
       .container {
@@ -38,10 +34,18 @@ A button that asks for confirmation before performing a given action
         display: flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        top: 0;
+        transition: opacity .3s .2s;
+      }
+
+      .confirm-panel.hidden {
+        pointer-events: none;
       }
 
       .confirm-btn {
         font-size: 70%;
+        transition: transform .3s, opacity .3s;
       }
 
       .confirm-btn * {
@@ -51,21 +55,33 @@ A button that asks for confirmation before performing a given action
       #confirmBtn {
         background-color: var(--confirm-button-confirm-background-color, #0f9d58);
         color: var(--confirm-button-confirm-color, white);
+        transform-origin: left;
       }
 
       #cancelBtn {
         background-color: var(--confirm-button-cancel-background-color, #e3010a);
         color: var(--confirm-button-cancel-color, white);
+        transform-origin: right;
+      }
+
+      .selected {
+        transform: scale(4);
+        opacity: 0;
+      }
+
+      .unselected {
+        transform: scale(0);
+        opacity: 0;
       }
     </style>
 
     <div class="container">
-      <paper-button id="confirmToggle" raised hidden$="[[confirming]]">
+      <paper-button id="confirmToggle" raised>
         <div>
           <content></content>
         </div>
       </paper-button>
-      <div class="confirm-panel" hidden$="[[!confirming]]" tabindex="-1">
+      <div class="confirm-panel hidden" id="confirmPanel" tabindex="-1">
         <paper-button class="confirm-btn" id="confirmBtn" raised on-tap="doAction">
           <iron-icon icon="check"></iron-icon>
         </paper-button>
@@ -94,6 +110,20 @@ A button that asks for confirmation before performing a given action
         }
       },
 
+      created: function () {
+        this._boundEventListeners = {
+          transitionend: this._cleanAfterTransition.bind(this)
+        };
+      },
+
+      attached: function () {
+        this.$.confirmPanel.addEventListener('transitionend', this._boundEventListeners.transitionend);
+      },
+
+      detached: function () {
+        this.$.confirmPanel.removeEventListener('transitionend', this._boundEventListeners.transitionend);
+      },
+
       keyBindings: {
         'esc': 'cancelConfirming',
         'enter': 'doAction',
@@ -109,16 +139,22 @@ A button that asks for confirmation before performing a given action
       },
 
       cancelConfirming: function (e) {
+        this.$.confirmBtn.classList.add('unselected');
+        this.$.cancelBtn.classList.add('selected');
         this._decideAndPerform(e, 'action-canceled');
       },
 
       startConfirming: function (e) {
         this.confirming = true;
+        this.$.confirmToggle.classList.add('hidden');
+        this.$.confirmPanel.classList.remove('hidden');
         this.$.confirmBtn.focus();
         e.stopPropagation();
       },
 
       doAction: function (e) {
+        this.$.confirmBtn.classList.add('selected');
+        this.$.cancelBtn.classList.add('unselected');
         this._decideAndPerform(e, 'action-confirmed');
       },
 
@@ -126,10 +162,24 @@ A button that asks for confirmation before performing a given action
         if (this.confirming) {
           e.stopPropagation();
           this.fire(eventName, e);
-          this.confirming = false;
         } else if (e.type === 'tap') {
           e.preventDefault();
           e.stopPropagation();
+        }
+        this.confirming = false;
+
+        this.$.confirmToggle.classList.remove('hidden');
+        this.$.confirmPanel.classList.add('hidden');
+      },
+
+      _cleanAfterTransition: function () {
+        let selected = this.$$('.selected'),
+            unselected = this.$$('.unselected');
+        if (selected) {
+          selected.classList.remove('selected');
+        }
+        if (unselected) {
+          unselected.classList.remove('unselected');
         }
       }
 

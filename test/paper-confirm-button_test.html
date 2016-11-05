@@ -31,13 +31,15 @@
         });
         test('when clicking the cancel button "action-canceled" event should be fired', function(done) {
           var element = fixture('basic');
+          element.click();
           element.addEventListener('action-canceled', ev => done());
-          element.$.cancelBtn.click();
+          element.$$('#cancelBtn').click();
         });
         test('when clicking the confirm button "action-confirmed" event should be fired', function(done) {
           var element = fixture('basic');
+          element.click();
           element.addEventListener('action-confirmed', ev => done());
-          element.$.confirmBtn.click();
+          element.$$('#confirmBtn').click();
         });
       });
     </script>
