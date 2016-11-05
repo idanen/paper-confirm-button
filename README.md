@@ -1,12 +1,12 @@
-# \<ie-confirm-button\>
+# \<paper-confirm-button\>
 
 A button that asks for confirmation before performing an action
 
 ## Usage
 
-Add the `<ie-confirm-button></ie-confirm-button>` to your page and add an action to be done once user confirms:
+Add the `<paper-confirm-button></paper-confirm-button>` to your page and add an action to be done once user confirms:
 ```html
-<ie-confirm-button id="confirm">Action!</ie-confirm-button>
+<paper-confirm-button id="confirm">Action!</paper-confirm-button>
 <script>
   let confirm = document.querySelector('#confirm'),
       action = ev => console.log('confirmed!');
