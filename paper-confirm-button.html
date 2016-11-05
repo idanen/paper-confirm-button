@@ -1,6 +1,16 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<iron-iconset-svg size="24" name="confirmicons">
+  <svg><defs>
+    <g id="clear"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+    <g id="done"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></g>
+  </defs></svg>
+</iron-iconset-svg>
+
 
 <!--
 `paper-confirm-button`
@@ -83,10 +93,10 @@ A button that asks for confirmation before performing a given action
       </paper-button>
       <div class="confirm-panel hidden" id="confirmPanel" tabindex="-1">
         <paper-button class="confirm-btn" id="confirmBtn" raised on-tap="doAction">
-          <iron-icon icon="check"></iron-icon>
+          <iron-icon icon="confirmicons:done"></iron-icon>
         </paper-button>
         <paper-button class="confirm-btn" id="cancelBtn" raised on-tap="cancelConfirming">
-          <iron-icon icon="clear"></iron-icon>
+          <iron-icon icon="confirmicons:clear"></iron-icon>
         </paper-button>
       </div>
     </div>
