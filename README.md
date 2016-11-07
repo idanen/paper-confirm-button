@@ -3,8 +3,12 @@
 A button that asks for confirmation before performing an action
 
 ## Usage
+1. Import the element
+```html
+<link rel="import" href="bower_components/paper-confirm-button/paper-confirm-button.html"/>
+```
 
-Add the `<paper-confirm-button></paper-confirm-button>` to your page and add an action to be done once user confirms:
+Use the `<paper-confirm-button></paper-confirm-button>` in your page and add an action to be done once user confirms:
 ```html
 <paper-confirm-button id="confirm">Action!</paper-confirm-button>
 <script>
