@@ -2,6 +2,9 @@
 
 A button that asks for confirmation before performing an action
 
+## Demo
+See the element page: https://idanen.github.com/paper-confirm-button
+
 ## Usage
 1. Import the element
   ```html
